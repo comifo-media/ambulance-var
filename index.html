@@ -165,12 +165,12 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
           <span>Attente &gt; 15 min (tranches de 30 min)<br><span class="note" style="margin:0">45,00 € par tranche</span></span>
           <div class="counter"><button type="button" data-act="wait" data-d="-1">-</button><output id="waitN">0</output><button type="button" data-act="wait" data-d="1">+</button></div>
         </div>
-        <label class="check"> <input type="checkbox" id="pVide">
-  <span style="display:flex; flex-direction:column; flex:1; margin:0 8px;">
-    <span>Déplacement / Portage
-    <span class="note" style="margin:0; font-size:0.75rem; color:#888;">(soumis à majoration)
-  
-  <span class="p">90,00 €</span></label>
+        <label class="check"><input type="checkbox" id="pVide">
+          <span style="display:flex; flex-direction:column; flex:1; margin:0 8px;">
+            <span>Déplacement / Portage</span>
+            <span class="note" style="margin:0; font-size:0.75rem; color:#888;">(soumis à majoration)</span>
+          </span>
+          <span class="p">90,00 €</span></label>
         <div class="rowline">
           <span>Bagages supplémentaires (&gt; 2)<br><span class="note" style="margin:0">2,00 € par bagage</span></span>
           <div class="counter"><button type="button" data-act="bags" data-d="-1">-</button><output id="bagsN">0</output><button type="button" data-act="bags" data-d="1">+</button></div>
@@ -345,7 +345,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 
     var non = [];
     if (state.wait > 0) non.push(['Attente > 15 min (' + state.wait + ' x 30 min)', r2(state.wait * WAIT)]);
-    if ($('pVide').checked) non.push(['Voyage à vide / Portage', 90]);
+    if ($('pVide').checked) non.push(['Déplacement / Portage', 90]);
     if (state.bags > 0) non.push(['Bagages supplémentaires (' + state.bags + ' x 2,00 €)', r2(state.bags * BAG)]);
     var renfort = num($('renfort').value);
     if (renfort > 0) non.push(['Ambulancier en renfort', r2(renfort)]);
