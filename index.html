@@ -71,6 +71,20 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
 @media(max-width:420px){.actions{grid-template-columns:1fr}}
 .actions .btn{padding:14px}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:10px 16px;border-radius:8px;display:none;font-weight:600}
+.refLink{display:block;margin:18px auto 24px;width:max-content;background:none;border:1px solid var(--line);color:var(--muted);font-size:.8rem;padding:6px 12px;border-radius:999px;cursor:pointer}
+.refLink:hover{color:var(--acc);border-color:var(--acc)}
+dialog.ref{border:0;border-radius:14px;padding:0;width:min(640px,calc(100vw - 24px));max-height:88vh;background:var(--card);color:var(--txt);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+dialog.ref::backdrop{background:rgba(10,14,22,.55)}
+.refHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card)}
+.refHead h2{font-size:1rem;margin:0}
+.refBody{padding:6px 16px 18px;font-size:.9rem;overflow:auto;max-height:calc(88vh - 60px)}
+.refBody h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--acc);margin:18px 0 6px}
+.refBody table{font-size:.88rem}
+.refBody td.n{width:30%}
+.refBody ul{padding-left:18px;margin:6px 0}
+.refBody li{margin:3px 0}
+.refBody a{color:var(--acc)}
+.refBody .small{font-size:.78rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -171,6 +185,60 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
   </div>
 </div>
 <div class="toast" id="toast">Copié dans le presse-papiers</div>
+
+<button class="refLink" id="refOpen" type="button">ℹ️ Grilles &amp; Références réglementaires</button>
+<dialog class="ref" id="refDialog" aria-labelledby="refTitle">
+  <div class="refHead">
+    <h2 id="refTitle">Grilles &amp; Références réglementaires</h2>
+    <button class="btn ghost small" id="refClose" type="button" aria-label="Fermer">Fermer</button>
+  </div>
+  <div class="refBody">
+    <h3>Forfaits conventionnels SEFI Var 2025</h3>
+    <table>
+      <tr><td>Forfait agglomération Grand Toulon (3 km inclus)</td><td class="n">64,08 €</td></tr>
+      <tr><td>Forfait départemental (3 km inclus)</td><td class="n">57,39 €</td></tr>
+      <tr><td>Tarif kilométrique, au-delà des 3 km inclus</td><td class="n">2,44 € / km</td></tr>
+    </table>
+
+    <h3>Valorisation trajet court (VTC, distance de 19 km ou moins)</h3>
+    <table>
+      <tr><td>Jusqu'à 5 km</td><td class="n">9,75 €</td></tr>
+      <tr><td>De 6 à 10 km</td><td class="n">7,53 €</td></tr>
+      <tr><td>De 11 à 15 km</td><td class="n">4,97 €</td></tr>
+      <tr><td>De 16 à 19 km</td><td class="n">3,42 €</td></tr>
+    </table>
+
+    <h3>Règle d'assiette des majorations</h3>
+    <ul>
+      <li>Nuit (20 h à 8 h) : +75 %.</li>
+      <li>Samedi après-midi, dimanche et jours fériés : +50 %.</li>
+      <li>Ces majorations s'appliquent uniquement sur forfait + VTC.</li>
+      <li>Les kilomètres ne sont jamais majorés.</li>
+    </ul>
+
+    <h3>Régime dérogatoire T.UPH (SAMU / Centre 15)</h3>
+    <ul>
+      <li>Forfait de 150,00 € pour les 20 premiers km.</li>
+      <li>2,32 € par km au-delà de 20 km.</li>
+      <li>Sans majoration ni valorisation trajet court.</li>
+    </ul>
+
+    <h3>Suppléments fixes conventionnels</h3>
+    <ul>
+      <li>Prise en charge gare, port ou aéroport : 21,67 €.</li>
+      <li>Transport en incubateur (prématuré) : 10,83 €.</li>
+      <li>Non cumulables, non majorés.</li>
+    </ul>
+
+    <h3>Sources officielles</h3>
+    <ul>
+      <li><a href="https://www.ameli.fr/transporteur-sanitaire/exercice-professionnel/facturation/tarifs/ambulances-tarifs-conventionnels" target="_blank" rel="noopener">Ameli Pro : tarifs conventionnels ambulances</a></li>
+      <li><a href="https://www.ameli.fr/transporteur-sanitaire/exercice-professionnel/vie-entreprise/tuph-modalites-et-demarches" target="_blank" rel="noopener">Ameli Pro : TUPH, modalités et démarches</a></li>
+      <li><a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047524277" target="_blank" rel="noopener">Légifrance : arrêté du 3 mai 2023 (avenant TUPH)</a></li>
+    </ul>
+    <p class="small">Valeurs indicatives. Vérifier sur les sources officielles avant facturation.</p>
+  </div>
+</dialog>
 
 <script>
 (function () {
@@ -373,6 +441,18 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(function () {});
   });
 }
+</script>
+<script>
+(function () {
+  var dlg = document.getElementById('refDialog');
+  document.getElementById('refOpen').addEventListener('click', function () {
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  });
+  document.getElementById('refClose').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg) dlg.close();
+  });
+})();
 </script>
 </body>
 </html>
