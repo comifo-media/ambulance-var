@@ -71,7 +71,6 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
 @media(max-width:420px){.actions{grid-template-columns:1fr}}
 .actions .btn{padding:14px}
 .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:10px 16px;border-radius:8px;display:none;font-weight:600}
-.refFoot{margin:0;text-align:center;color:var(--muted);font-size:.72rem;line-height:1.35;padding-bottom:18px}
 .refLink{display:block;margin:18px auto 4px;width:max-content;background:none;border:1px solid var(--line);color:var(--muted);font-size:.8rem;padding:6px 12px;border-radius:999px;cursor:pointer}
 .refLink:hover{color:var(--acc);border-color:var(--acc)}
 .sig{margin:0 auto 24px;text-align:center;color:var(--muted);font-size:.72rem;max-width:520px;line-height:1.35}
@@ -87,6 +86,8 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 .refBody li{margin:3px 0}
 .refBody a{color:var(--acc)}
 .refBody .small{font-size:.78rem;color:var(--muted)}
+.refBody .kmRule{color:var(--red);font-weight:600;margin:10px 0 0}
+.refFoot{margin:14px 0 0;text-align:center;color:var(--muted);font-size:.72rem;line-height:1.35}
 </style>
 </head>
 <body>
@@ -189,7 +190,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 <div class="toast" id="toast">Copié dans le presse-papiers</div>
 
 <button class="refLink" id="refOpen" type="button">ℹ️ Grilles &amp; Références réglementaires</button>
-<p class="sig">Application créée par David et Alix (assistante IA Poke) selon Grilles et Références réglementaires CPAM / SEFI Var 2025</p>
+<p class="sig">Application créée par David et Alix (assistante IA Poke)</p>
 <dialog class="ref" id="refDialog" aria-labelledby="refTitle">
   <div class="refHead">
     <h2 id="refTitle">Grilles &amp; Références réglementaires</h2>
@@ -216,8 +217,8 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       <li>Nuit (20 h à 8 h) : +75 %.</li>
       <li>Samedi après-midi, dimanche et jours fériés : +50 %.</li>
       <li>Ces majorations s'appliquent uniquement sur forfait + VTC.</li>
-      <li>Les kilomètres ne sont jamais majorés.</li>
     </ul>
+    <p class="kmRule">Les kilomètres ne sont jamais majorés.</p>
 
     <h3>Régime dérogatoire T.UPH (SAMU / Centre 15)</h3>
     <ul>
@@ -233,6 +234,13 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       <li>Non cumulables, non majorés.</li>
     </ul>
 
+    <h3>Tarifs non remboursables / Hors convention</h3>
+    <table>
+      <tr><td>Attente (au-delà de 15 min)</td><td class="n">45,00 € / demi-heure</td></tr>
+      <tr><td>Voyage à vide / Portement</td><td class="n">90,00 €</td></tr>
+      <tr><td>Bagage supplémentaire (au-delà de 2 bagages)</td><td class="n">2,00 € par bagage</td></tr>
+    </table>
+
     <h3>Sources officielles</h3>
     <ul>
       <li><a href="https://www.ameli.fr/transporteur-sanitaire/exercice-professionnel/facturation/tarifs/ambulances-tarifs-conventionnels" target="_blank" rel="noopener">Ameli Pro : tarifs conventionnels ambulances</a></li>
@@ -240,7 +248,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       <li><a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047524277" target="_blank" rel="noopener">Légifrance : arrêté du 3 mai 2023 (avenant TUPH)</a></li>
     </ul>
     <p class="small">Valeurs indicatives. Vérifier sur les sources officielles avant facturation.</p>
-    <p class="refFoot">Application créée par David et Alix (assistante IA Poke) selon Grilles et Références réglementaires CPAM / SEFI Var 2025</p>
+    <p class="refFoot">Application créée par David et Alix (assistante IA Poke)</p>
   </div>
 </dialog>
 
