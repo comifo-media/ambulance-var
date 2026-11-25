@@ -50,6 +50,7 @@ input[type=number]{width:100%;padding:12px;font-size:1.05rem;border:1px solid va
 .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
 .btn.ok{background:var(--ok)}
 .btn.small{padding:6px 10px;font-size:.8rem}
+.tickets small{color:var(--muted);font-weight:400;font-size:.75rem}
 .tickets{list-style:none;margin:8px 0 0;padding:0}
 .tickets li{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}
 .counter{display:flex;align-items:center;gap:10px}
@@ -80,7 +81,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
 <div class="wrap">
   <div>
     <section class="card">
-      <h2>Zone de départ</h2>
+      <h2>Forfait</h2>
       <div class="seg">
         <label><input type="radio" name="zone" value="dep" checked>Départemental</label>
         <label><input type="radio" name="zone" value="toulon">Agglo Grand Toulon</label>
@@ -98,15 +99,20 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     </section>
 
     <section class="card" style="margin-top:14px">
-      <h2>Mode conventionnel</h2>
+      <h2>MISSION CENTRE 15</h2>
       <div class="c15box">
-        <label class="check"><input type="checkbox" id="c15"><span><strong>Mission Centre 15 (T.UPH)</strong><br><span class="note" style="margin:0">Forfait 150,00 € (20 km inclus), 2,32 €/km au-delà de 20 km. Écrase le calcul standard, sans majoration ni Valorisation trajet court.</span></span></label>
+        <label class="check"><input type="checkbox" id="c15"><span><strong>Mission SAMU (T.UPH)</strong><br><span class="note" style="margin:0">Forfait 150,00 € (20 km inclus), 2,32 €/km au-delà de 20 km. Écrase le calcul standard, sans majoration ni Valorisation trajet court.</span></span></label>
       </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h2>MAJORATIONS</h2>
       <div class="seg three" id="periodSeg">
         <label><input type="radio" name="period" value="normal" checked>Jour normal</label>
         <label><input type="radio" name="period" value="nuit">Forfait Nuit<br><small>(20h - 8h)</small></label>
         <label><input type="radio" name="period" value="we">Forfait WE<br><small>(Sam > 12h, Dim, Férié)</small></label>
       </div>
+      <div class="note">Majorations (forfaits et trajets courts) : appliquées au forfait et à la valorisation trajet court uniquement. Les kilomètres ne sont jamais majorés.</div>
       <div class="note" id="periodNote"></div>
     </section>
 
@@ -127,7 +133,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
 
   <div>
     <section class="card">
-      <h2>Suppléments remboursables</h2>
+      <h2>Suppléments remboursables (non cumulables)</h2>
       <label class="check"><input type="checkbox" id="sPort"> Prise en charge port / gare / aéroport <span class="p">21,67 €</span></label>
       <label class="check"><input type="checkbox" id="sPrem"> Transport prématuré <span class="p">10,83 €</span></label>
     </section>
@@ -212,34 +218,34 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     if (c15) {
       var kmSup = Math.max(0, km - UPH.incl);
       var kmAmt = r2(kmSup * UPH.km);
-      conv.push(['Forfait Centre 15 / T.UPH (20 km inclus)', UPH.forfait]);
+      conv.push(['Forfait SAMU / T.UPH (20 km inclus)', UPH.forfait]);
       if (kmSup > 0) conv.push(['Km au-delà de 20 km (' + fkm(kmSup) + ' x 2,32 €)', kmAmt]);
       convTotal = r2(UPH.forfait + kmAmt);
       conv.push(['Résultat conventionnel', convTotal, 'sub']);
-      sections.push({ title: 'Mission Centre 15 (T.UPH)', rows: conv });
+      sections.push({ title: 'Mission SAMU (T.UPH)', rows: conv });
     } else {
       var base = FORFAIT[zone];
       var kmF = Math.max(0, km - 3);
       var kmAmt2 = r2(kmF * KM);
       var v = vtc(km);
-      var sub = r2(base + kmAmt2 + v.amt);
+      var baseM = r2(base + v.amt);
       var coef = period === 'nuit' ? 1.75 : (period === 'we' ? 1.5 : 1);
-      var resu = r2(sub * coef);
+      var baseMajore = r2(baseM * coef);
+      convTotal = r2(baseMajore + kmAmt2);
       conv.push(['Forfait ' + (zone === 'dep' ? 'départemental' : 'agglomération Grand Toulon') + ' (3 km inclus)', base]);
-      if (kmF > 0) conv.push(['Km facturés (' + fkm(kmF) + ' x 2,44 €)', kmAmt2]);
-      if (v.amt > 0) conv.push(['Valorisation trajet court (tranche ' + v.label + ') : ' + fmtNum(v.amt) + ' €', v.amt, 'vtc']);
-      conv.push(['Sous-total avant majoration', sub, 'sub']);
+      if (v.amt > 0) conv.push(['Valorisation trajet court (tranche ' + v.label + ') : ' + v.amt.toFixed(2) + ' €', v.amt, 'vtc']);
       if (coef > 1) {
-        var lab = period === 'nuit' ? 'Majoration nuit (+75 %)' : 'Majoration samedi apm / dimanche / férié (+50 %)';
-        conv.push([lab, r2(resu - sub)]);
-        conv.push(['Résultat conventionnel', resu, 'sub']);
-      } else {
-        conv.push(['Résultat conventionnel (jour normal, sans majoration)', resu, 'sub']);
+        conv.push(['Sous-total forfait + VTC avant majoration', baseM, 'sub']);
+        var lab = period === 'nuit' ? 'Majoration nuit (+75 %) sur forfait + VTC' : 'Majoration samedi apm / dimanche / férié (+50 %) sur forfait + VTC';
+        conv.push([lab, r2(baseMajore - baseM)]);
+        conv.push(['Forfait + VTC majorés', baseMajore, 'sub']);
       }
-      convTotal = resu;
+      if (kmF > 0) conv.push(['Km facturés non majorés (' + fkm(kmF) + ' x 2,44 €)', kmAmt2]);
+      conv.push(['Résultat conventionnel' + (coef > 1 ? '' : ' (sans majoration)'), convTotal, 'sub']);
       sections.push({ title: 'Calcul conventionnel', rows: conv });
     }
 
+    var peage = r2(state.tickets.reduce(function (a, b) { return a + b; }, 0));
     var peRows = [];
     state.tickets.forEach(function (amt, i) { peRows.push(['Péage ' + (i + 1), amt]); });
     sections.push({ title: 'Péages', rows: peRows });
@@ -247,7 +253,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     var remb = [];
     if ($('sPort').checked) remb.push(['Prise en charge port / gare / aéroport', 21.67]);
     if ($('sPrem').checked) remb.push(['Transport prématuré', 10.83]);
-    sections.push({ title: 'Suppléments remboursables', rows: remb });
+    sections.push({ title: 'Suppléments remboursables (non cumulables)', rows: remb });
 
     var non = [];
     if (state.wait > 0) non.push(['Attente > 15 min (' + state.wait + ' x 30 min)', r2(state.wait * WAIT)]);
@@ -284,7 +290,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     t += 'Date : ' + new Date().toLocaleString('fr-FR') + '\n';
     t += 'Tarif : Majoré SEFI 2025\n';
     t += 'Zone : ' + (d.zone === 'dep' ? 'Départemental' : 'Agglo Grand Toulon') + '\n';
-    t += 'Mode : ' + (d.c15 ? 'Mission Centre 15 (T.UPH)' : 'Conventionnel') + '\n';
+    t += 'Mode : ' + (d.c15 ? 'Mission SAMU (T.UPH)' : 'Conventionnel') + '\n';
     t += 'Kilométrage total : ' + fkm(d.km) + ' km\n';
     d.sections.forEach(function (s) {
       if (!s.rows.length) return;
@@ -309,7 +315,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
   function render() {
     var c15 = $('c15').checked;
     document.querySelectorAll('input[name=period]').forEach(function (r) { r.disabled = c15; });
-    $('periodNote').textContent = c15 ? 'Désactivé en mode Centre 15 : aucune majoration horaire ou calendaire.' : '';
+    $('periodNote').textContent = c15 ? 'Désactivé en mode Mission SAMU : aucune majoration horaire ou calendaire.' : '';
     $('forfaitInfo').textContent = 'Forfait : ' + fmt(FORFAIT[document.querySelector('input[name=zone]:checked').value]) + ' (3 km inclus)';
     $('waitN').textContent = state.wait;
     $('bagsN').textContent = state.bags;
