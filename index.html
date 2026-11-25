@@ -40,7 +40,8 @@ header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
 .c15box{border:2px solid var(--red);border-radius:12px;padding:10px 12px;margin-bottom:12px}
 .c15box .check input{accent-color:var(--red)}
 .c15box .check{border:0;padding:4px 0}
-.warn{margin-top:10px;padding:10px 12px;border:1px solid #ef4444;border-radius:10px;background:rgba(239,68,68,.12);color:#ef4444;font-size:.85rem;font-weight:700;line-height:1.35}
+.majNote{margin:10px 0 0;font-size:.82rem;color:var(--muted);line-height:1.35}
+.kmRuleMain{margin:6px 0 0;font-size:.85rem;font-weight:600;color:var(--red);line-height:1.35}
 .note{font-size:.8rem;color:var(--muted);margin-top:6px}
 .field{margin-top:10px}
 .field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
@@ -130,7 +131,8 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
         <label><input type="radio" name="period" value="nuit">Forfait Nuit<br><small>(20h - 8h)</small></label>
         <label><input type="radio" name="period" value="we">Forfait WE<br><small>(Sam > 12h, Dim, Férié)</small></label>
       </div>
-      <div class="warn">Majorations (forfaits et trajets courts) : appliquées au forfait et à la valorisation trajet court uniquement. Les kilomètres ne sont jamais majorés.</div>
+      <p class="majNote">Majorations (forfaits et trajets courts) : appliquées au forfait et à la valorisation trajet court uniquement.</p>
+      <p class="kmRuleMain">Les kilomètres ne sont jamais majorés.</p>
       <div class="note" id="periodNote"></div>
     </section>
 
