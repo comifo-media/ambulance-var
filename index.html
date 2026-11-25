@@ -40,6 +40,7 @@ header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
 .c15box{border:2px solid var(--red);border-radius:12px;padding:10px 12px;margin-bottom:12px}
 .c15box .check input{accent-color:var(--red)}
 .c15box .check{border:0;padding:4px 0}
+.warn{margin-top:10px;padding:10px 12px;border:1px solid #ef4444;border-radius:10px;background:rgba(239,68,68,.12);color:#ef4444;font-size:.85rem;font-weight:700;line-height:1.35}
 .note{font-size:.8rem;color:var(--muted);margin-top:6px}
 .field{margin-top:10px}
 .field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
@@ -112,7 +113,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
         <label><input type="radio" name="period" value="nuit">Forfait Nuit<br><small>(20h - 8h)</small></label>
         <label><input type="radio" name="period" value="we">Forfait WE<br><small>(Sam > 12h, Dim, Férié)</small></label>
       </div>
-      <div class="note">Majorations (forfaits et trajets courts) : appliquées au forfait et à la valorisation trajet court uniquement. Les kilomètres ne sont jamais majorés.</div>
+      <div class="warn">Majorations (forfaits et trajets courts) : appliquées au forfait et à la valorisation trajet court uniquement. Les kilomètres ne sont jamais majorés.</div>
       <div class="note" id="periodNote"></div>
     </section>
 
@@ -146,16 +147,10 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
           <div class="counter"><button type="button" data-act="wait" data-d="-1">-</button><output id="waitN">0</output><button type="button" data-act="wait" data-d="1">+</button></div>
         </div>
         <label class="check"><input type="checkbox" id="pVide"> Déplacement / portage à vide <span class="p">90,00 €</span></label>
-        <label class="check"><input type="checkbox" id="pTrans"> Transmission de données <span class="p">15,00 €</span></label>
         <div class="rowline">
           <span>Bagages supplémentaires (&gt; 2)<br><span class="note" style="margin:0">2,00 € par bagage</span></span>
           <div class="counter"><button type="button" data-act="bags" data-d="-1">-</button><output id="bagsN">0</output><button type="button" data-act="bags" data-d="1">+</button></div>
         </div>
-        <div class="field">
-          <label for="detour">Détour demandé par le client (km, 2,44 €/km)</label>
-          <input type="number" id="detour" min="0" step="0.1" inputmode="decimal" placeholder="0">
-        </div>
-        <label class="check"><input type="checkbox" id="pAssu"> Option ASSU (+10 % du résultat conventionnel)</label>
         <div class="field">
           <label for="renfort">Ambulancier en renfort (montant libre, facultatif)</label>
           <input type="number" id="renfort" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
@@ -191,7 +186,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
   var KM = 2.44;
   var VTC = [[5, 9.75], [10, 7.53], [15, 5.47], [19, 3.42]];
   var UPH = { forfait: 150, incl: 20, km: 2.32 };
-  var WAIT = 45, BAG = 2, PEAGE_DETOUR = 2.44;
+  var WAIT = 45, BAG = 2;
 
   var state = { tickets: [], wait: 0, bags: 0 };
 
@@ -258,11 +253,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     var non = [];
     if (state.wait > 0) non.push(['Attente > 15 min (' + state.wait + ' x 30 min)', r2(state.wait * WAIT)]);
     if ($('pVide').checked) non.push(['Déplacement / portage à vide', 90]);
-    if ($('pTrans').checked) non.push(['Transmission de données', 15]);
     if (state.bags > 0) non.push(['Bagages supplémentaires (' + state.bags + ' x 2,00 €)', r2(state.bags * BAG)]);
-    var detour = num($('detour').value);
-    if (detour > 0) non.push(['Détour client (' + fkm(detour) + ' km x 2,44 €)', r2(detour * PEAGE_DETOUR)]);
-    if ($('pAssu').checked) non.push(['Option ASSU (+10 % du résultat conventionnel)', r2(convTotal * 0.10)]);
     var renfort = num($('renfort').value);
     if (renfort > 0) non.push(['Ambulancier en renfort', r2(renfort)]);
     sections.push({ title: 'Prestations complémentaires non remboursables', rows: non });
@@ -332,8 +323,8 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     $('c15').checked = false;
     document.querySelector('input[name=zone][value=dep]').checked = true;
     document.querySelector('input[name=period][value=normal]').checked = true;
-    ['sPort', 'sPrem', 'pVide', 'pTrans', 'pAssu'].forEach(function (id) { $(id).checked = false; });
-    $('detour').value = ''; $('renfort').value = ''; $('peageIn').value = '';
+    ['sPort', 'sPrem', 'pVide'].forEach(function (id) { $(id).checked = false; });
+    $('renfort').value = ''; $('peageIn').value = '';
     render();
   }
 
