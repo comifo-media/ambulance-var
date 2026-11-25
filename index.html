@@ -93,7 +93,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     <section class="card" style="margin-top:14px">
       <h2>Mode conventionnel</h2>
       <div class="c15box">
-        <label class="check"><input type="checkbox" id="c15"><span><strong>Mission Centre 15 (T.UPH)</strong><br><span class="note" style="margin:0">Forfait 150,00 € (20 km inclus), 2,32 €/km au-delà de 20 km. Écrase le calcul standard, sans majoration ni VTC.</span></span></label>
+        <label class="check"><input type="checkbox" id="c15"><span><strong>Mission Centre 15 (T.UPH)</strong><br><span class="note" style="margin:0">Forfait 150,00 € (20 km inclus), 2,32 €/km au-delà de 20 km. Écrase le calcul standard, sans majoration ni Valorisation trajet court.</span></span></label>
       </div>
       <div class="seg three" id="periodSeg">
         <label><input type="radio" name="period" value="normal" checked>Jour normal</label>
@@ -220,7 +220,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
       var resu = r2(sub * coef);
       conv.push(['Forfait ' + (zone === 'dep' ? 'départemental' : 'agglomération Grand Toulon') + ' (3 km inclus)', base]);
       if (kmF > 0) conv.push(['Km facturés (' + fkm(kmF) + ' x 2,44 €)', kmAmt2]);
-      if (v.amt > 0) conv.push(['VTC (tranche ' + v.label + ') : ' + fmtNum(v.amt) + ' €', v.amt, 'vtc']);
+      if (v.amt > 0) conv.push(['Valorisation trajet court (tranche ' + v.label + ') : ' + fmtNum(v.amt) + ' €', v.amt, 'vtc']);
       conv.push(['Sous-total avant majoration', sub, 'sub']);
       if (coef > 1) {
         var lab = period === 'nuit' ? 'Majoration nuit (+75 %)' : 'Majoration samedi apm / dimanche / férié (+50 %)';
