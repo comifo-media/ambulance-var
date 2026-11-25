@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facture ambulance Var (83) - Tarif SEFI 2025</title>
+<style>
+:root{--bg:#f5f6f8;--card:#ffffff;--txt:#1b2130;--muted:#6d7587;--acc:#1b6ca8;--red:#c8323f;--line:#e3e7ee;--ok:#2a9d5c}
+@media (prefers-color-scheme:dark){:root{--bg:#0e131d;--card:#171f2e;--txt:#e9edf5;--muted:#9aa4b8;--acc:#4ea8e8;--red:#ff5b6b;--line:#2a3447;--ok:#44c17d}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);font-size:16px;line-height:1.4}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header h1{font-size:1rem;margin:0}
+header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
+.wrap{max-width:1100px;margin:0 auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.card h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:var(--acc);margin:0 0 10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg.three{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:520px){.seg.three{grid-template-columns:1fr}}
+.seg label{border:1px solid var(--line);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;font-size:.92rem}
+.seg input{display:none}
+.seg label:has(input:checked){background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.seg label:has(input:disabled){opacity:.4;cursor:not-allowed}
+.locked{margin-top:8px;font-size:.8rem;color:var(--muted)}
+.check{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px dashed var(--line);cursor:pointer}
+.check:last-child{border-bottom:0}
+.check input{width:20px;height:20px;accent-color:var(--acc);flex:0 0 auto}
+.check .p{margin-left:auto;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.c15box{border:2px solid var(--red);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.c15box .check input{accent-color:var(--red)}
+.c15box .check{border:0;padding:4px 0}
+.note{font-size:.8rem;color:var(--muted);margin-top:6px}
+.field{margin-top:10px}
+.field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+input[type=number]{width:100%;padding:12px;font-size:1.05rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--txt)}
+.row{display:flex;gap:8px;align-items:center}
+.row input{flex:1}
+.btn{padding:12px 14px;border:0;border-radius:10px;background:var(--acc);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+.btn.ok{background:var(--ok)}
+.btn.small{padding:6px 10px;font-size:.8rem}
+.tickets{list-style:none;margin:8px 0 0;padding:0}
+.tickets li{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}
+.counter{display:flex;align-items:center;gap:10px}
+.counter button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--txt);font-size:1.2rem;cursor:pointer}
+.counter output{min-width:28px;text-align:center;font-weight:700}
+.rowline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px dashed var(--line)}
+details summary{cursor:pointer;font-weight:600;padding:4px 0;color:var(--acc)}
+details[open] summary{margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.head td{font-weight:700;color:var(--acc);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;padding-top:14px;border-bottom:0}
+tr.vtc td{color:var(--acc);font-weight:700;border-top:1px dashed var(--acc);border-bottom:1px dashed var(--acc)}
+tr.sub td{font-weight:600;border-top:2px solid var(--line)}
+.total{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding:16px;border-radius:12px;background:var(--acc);color:#fff;font-size:1.35rem;font-weight:800}
+.actions{display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-top:12px}
+@media(max-width:420px){.actions{grid-template-columns:1fr}}
+.actions .btn{padding:14px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:10px 16px;border-radius:8px;display:none;font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>Facture ambulance Var (83)<small>Tarif Majoré SEFI 2025 - estimation</small></h1>
+  <button class="btn ghost small" id="resetBtn" type="button">Réinitialiser</button>
+</header>
+
+<div class="wrap">
+  <div>
+    <section class="card">
+      <h2>Zone de départ</h2>
+      <div class="seg">
+        <label><input type="radio" name="zone" value="dep" checked>Départemental</label>
+        <label><input type="radio" name="zone" value="toulon">Agglo Grand Toulon</label>
+      </div>
+      <div class="locked" id="forfaitInfo"></div>
+      <div class="locked">Tarif appliqué : Majoré SEFI (verrouillé)</div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h2>Kilométrage</h2>
+      <div class="field" style="margin-top:0">
+        <label for="km">Kilomètres totaux parcourus</label>
+        <input type="number" id="km" min="0" step="0.1" value="" inputmode="decimal" placeholder="0">
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h2>Mode conventionnel</h2>
+      <div class="c15box">
+        <label class="check"><input type="checkbox" id="c15"><span><strong>Mission Centre 15 (T.UPH)</strong><br><span class="note" style="margin:0">Forfait 150,00 € (20 km inclus), 2,32 €/km au-delà de 20 km. Écrase le calcul standard, sans majoration ni VTC.</span></span></label>
+      </div>
+      <div class="seg three" id="periodSeg">
+        <label><input type="radio" name="period" value="normal" checked>Jour normal</label>
+        <label><input type="radio" name="period" value="nuit">Nuit 20h-08h (+75 %)</label>
+        <label><input type="radio" name="period" value="we">Sam. apm, dim., férié (+50 %)</label>
+      </div>
+      <div class="note" id="periodNote"></div>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h2>Péages autoroutiers</h2>
+      <div class="field" style="margin-top:0">
+        <label for="peageIn">Montant d'un ticket (€, décimales possibles)</label>
+        <div class="row">
+          <input type="number" id="peageIn" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
+          <button class="btn" id="addTicket" type="button">Ajouter</button>
+        </div>
+      </div>
+      <ul class="tickets" id="ticketList"></ul>
+      <div class="rowline" style="border:0;padding-top:8px"><span>Total péages (sans majoration)</span><strong id="peageTotal">0,00 €</strong></div>
+      <div class="note" style="margin-top:0">Ajouté au total quel que soit le mode, au prix coûtant.</div>
+    </section>
+  </div>
+
+  <div>
+    <section class="card">
+      <h2>Suppléments remboursables</h2>
+      <label class="check"><input type="checkbox" id="sPort"> Prise en charge port / gare / aéroport <span class="p">21,67 €</span></label>
+      <label class="check"><input type="checkbox" id="sPrem"> Transport prématuré <span class="p">10,83 €</span></label>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <details>
+        <summary>Prestations complémentaires non remboursables</summary>
+        <div class="rowline">
+          <span>Attente &gt; 15 min (tranches de 30 min)<br><span class="note" style="margin:0">45,00 € par tranche</span></span>
+          <div class="counter"><button type="button" data-act="wait" data-d="-1">-</button><output id="waitN">0</output><button type="button" data-act="wait" data-d="1">+</button></div>
+        </div>
+        <label class="check"><input type="checkbox" id="pVide"> Déplacement / portage à vide <span class="p">90,00 €</span></label>
+        <label class="check"><input type="checkbox" id="pTrans"> Transmission de données <span class="p">15,00 €</span></label>
+        <div class="rowline">
+          <span>Bagages supplémentaires (&gt; 2)<br><span class="note" style="margin:0">2,00 € par bagage</span></span>
+          <div class="counter"><button type="button" data-act="bags" data-d="-1">-</button><output id="bagsN">0</output><button type="button" data-act="bags" data-d="1">+</button></div>
+        </div>
+        <div class="field">
+          <label for="detour">Détour demandé par le client (km, 2,44 €/km)</label>
+          <input type="number" id="detour" min="0" step="0.1" inputmode="decimal" placeholder="0">
+        </div>
+        <label class="check"><input type="checkbox" id="pAssu"> Option ASSU (+10 % du résultat conventionnel)</label>
+        <div class="field">
+          <label for="renfort">Ambulancier en renfort (montant libre, facultatif)</label>
+          <input type="number" id="renfort" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
+        </div>
+      </details>
+    </section>
+
+    <section class="card" style="margin-top:14px">
+      <h2>Résumé du calcul</h2>
+      <table id="detail"></table>
+      <div class="total"><span>TOTAL</span><span id="grand">0,00 €</span></div>
+      <div class="actions">
+        <button class="btn ok" id="copyBtn" type="button">Copier le devis / la facture</button>
+        <button class="btn ghost" id="resetBtn2" type="button">Réinitialiser</button>
+      </div>
+      <div class="note">Estimation indicative selon la grille SEFI 2025 retenue. À vérifier avant facturation.</div>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast">Copié dans le presse-papiers</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var r2 = function (x) { return Math.round((x + Number.EPSILON) * 100) / 100; };
+  var nf = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' });
+  var fmt = function (x) { return nf.format(r2(x)); };
+  var num = function (x) { var v = parseFloat(String(x).replace(',', '.')); return isFinite(v) && v > 0 ? v : 0; };
+  var fmtNum = function (x) { return r2(x).toFixed(2).replace('.', ','); };
+  var fkm = function (x) { return (Math.round(x * 10) / 10).toString().replace('.', ','); };
+
+  var FORFAIT = { dep: 57.39, toulon: 64.08 };
+  var KM = 2.44;
+  var VTC = [[5, 9.75], [10, 7.53], [15, 5.47], [19, 3.42]];
+  var UPH = { forfait: 150, incl: 20, km: 2.32 };
+  var WAIT = 45, BAG = 2, PEAGE_DETOUR = 2.44;
+
+  var state = { tickets: [], wait: 0, bags: 0 };
+
+  function vtc(km) {
+    if (km <= 0 || km > 19) return { amt: 0, label: '' };
+    for (var i = 0; i < VTC.length; i++) {
+      if (km <= VTC[i][0]) {
+        var lo = i === 0 ? 0 : VTC[i - 1][0] + 1;
+        return { amt: VTC[i][1], label: lo + '-' + VTC[i][0] + ' km' };
+      }
+    }
+    return { amt: 0, label: '' };
+  }
+
+  function compute() {
+    var c15 = $('c15').checked;
+    var zone = document.querySelector('input[name=zone]:checked').value;
+    var period = document.querySelector('input[name=period]:checked').value;
+    var km = num($('km').value);
+    var sections = [];
+    var conv = [];
+    var convTotal = 0;
+
+    if (c15) {
+      var kmSup = Math.max(0, km - UPH.incl);
+      var kmAmt = r2(kmSup * UPH.km);
+      conv.push(['Forfait Centre 15 / T.UPH (20 km inclus)', UPH.forfait]);
+      if (kmSup > 0) conv.push(['Km au-delà de 20 km (' + fkm(kmSup) + ' x 2,32 €)', kmAmt]);
+      convTotal = r2(UPH.forfait + kmAmt);
+      conv.push(['Résultat conventionnel', convTotal, 'sub']);
+      sections.push({ title: 'Mission Centre 15 (T.UPH)', rows: conv });
+    } else {
+      var base = FORFAIT[zone];
+      var kmF = Math.max(0, km - 3);
+      var kmAmt2 = r2(kmF * KM);
+      var v = vtc(km);
+      var sub = r2(base + kmAmt2 + v.amt);
+      var coef = period === 'nuit' ? 1.75 : (period === 'we' ? 1.5 : 1);
+      var resu = r2(sub * coef);
+      conv.push(['Forfait ' + (zone === 'dep' ? 'départemental' : 'agglomération Grand Toulon') + ' (3 km inclus)', base]);
+      if (kmF > 0) conv.push(['Km facturés (' + fkm(kmF) + ' x 2,44 €)', kmAmt2]);
+      if (v.amt > 0) conv.push(['VTC (tranche ' + v.label + ') : ' + fmtNum(v.amt) + ' €', v.amt, 'vtc']);
+      conv.push(['Sous-total avant majoration', sub, 'sub']);
+      if (coef > 1) {
+        var lab = period === 'nuit' ? 'Majoration nuit (+75 %)' : 'Majoration samedi apm / dimanche / férié (+50 %)';
+        conv.push([lab, r2(resu - sub)]);
+        conv.push(['Résultat conventionnel', resu, 'sub']);
+      } else {
+        conv.push(['Résultat conventionnel (jour normal, sans majoration)', resu, 'sub']);
+      }
+      convTotal = resu;
+      sections.push({ title: 'Calcul conventionnel', rows: conv });
+    }
+
+    var peage = r2(state.tickets.reduce(function (a, b) { return a + b; }, 0));
+    var peRows = [];
+    if (peage > 0) peRows.push(['Péages (' + state.tickets.length + ' ticket' + (state.tickets.length > 1 ? 's' : '') + ', prix coûtant)', peage]);
+    sections.push({ title: 'Péages', rows: peRows });
+
+    var remb = [];
+    if ($('sPort').checked) remb.push(['Prise en charge port / gare / aéroport', 21.67]);
+    if ($('sPrem').checked) remb.push(['Transport prématuré', 10.83]);
+    sections.push({ title: 'Suppléments remboursables', rows: remb });
+
+    var non = [];
+    if (state.wait > 0) non.push(['Attente > 15 min (' + state.wait + ' x 30 min)', r2(state.wait * WAIT)]);
+    if ($('pVide').checked) non.push(['Déplacement / portage à vide', 90]);
+    if ($('pTrans').checked) non.push(['Transmission de données', 15]);
+    if (state.bags > 0) non.push(['Bagages supplémentaires (' + state.bags + ' x 2,00 €)', r2(state.bags * BAG)]);
+    var detour = num($('detour').value);
+    if (detour > 0) non.push(['Détour client (' + fkm(detour) + ' km x 2,44 €)', r2(detour * PEAGE_DETOUR)]);
+    if ($('pAssu').checked) non.push(['Option ASSU (+10 % du résultat conventionnel)', r2(convTotal * 0.10)]);
+    var renfort = num($('renfort').value);
+    if (renfort > 0) non.push(['Ambulancier en renfort', r2(renfort)]);
+    sections.push({ title: 'Prestations complémentaires non remboursables', rows: non });
+
+    var total = 0;
+    sections.forEach(function (s) { s.rows.forEach(function (r) { if (r[2] !== 'sub') total += r[1]; }); });
+    return { sections: sections, total: r2(total), km: km, c15: c15, zone: zone, period: period };
+  }
+
+  function tableHtml(d) {
+    var h = '';
+    d.sections.forEach(function (s) {
+      if (!s.rows.length) return;
+      h += '<tr class="head"><td colspan="2">' + s.title + '</td></tr>';
+      s.rows.forEach(function (r) {
+        var cls = r[2] === 'sub' ? 'sub' : (r[2] === 'vtc' ? 'vtc' : '');
+        h += '<tr class="' + cls + '"><td>' + r[0] + '</td><td class="n">' + fmt(r[1]) + '</td></tr>';
+      });
+    });
+    return h;
+  }
+
+  function textHtml(d) {
+    var t = 'FACTURE TRANSPORT AMBULANCE - VAR (83)\n';
+    t += 'Date : ' + new Date().toLocaleString('fr-FR') + '\n';
+    t += 'Tarif : Majoré SEFI 2025\n';
+    t += 'Zone : ' + (d.zone === 'dep' ? 'Départemental' : 'Agglo Grand Toulon') + '\n';
+    t += 'Mode : ' + (d.c15 ? 'Mission Centre 15 (T.UPH)' : 'Conventionnel') + '\n';
+    t += 'Kilométrage total : ' + fkm(d.km) + ' km\n';
+    d.sections.forEach(function (s) {
+      if (!s.rows.length) return;
+      t += '\n' + s.title.toUpperCase() + '\n';
+      s.rows.forEach(function (r) { t += r[2] === 'vtc' ? '- ' + r[0] + '\n' : '- ' + r[0] + ' : ' + fmt(r[1]) + '\n'; });
+    });
+    t += '\nTOTAL : ' + fmt(d.total) + '\n';
+    return t;
+  }
+
+  function renderTickets() {
+    var ul = $('ticketList');
+    ul.innerHTML = '';
+    state.tickets.forEach(function (amt, i) {
+      var li = document.createElement('li');
+      li.innerHTML = '<span>Ticket ' + (i + 1) + '</span><span>' + fmt(amt) + ' <button class="btn ghost small" type="button" data-act="del" data-i="' + i + '">Supprimer</button></span>';
+      ul.appendChild(li);
+    });
+    $('peageTotal').textContent = fmt(state.tickets.reduce(function (a, b) { return a + b; }, 0));
+  }
+
+  function render() {
+    var c15 = $('c15').checked;
+    document.querySelectorAll('input[name=period]').forEach(function (r) { r.disabled = c15; });
+    $('periodNote').textContent = c15 ? 'Désactivé en mode Centre 15 : aucune majoration horaire ou calendaire.' : '';
+    $('forfaitInfo').textContent = 'Forfait : ' + fmt(FORFAIT[document.querySelector('input[name=zone]:checked').value]) + ' (3 km inclus)';
+    $('waitN').textContent = state.wait;
+    $('bagsN').textContent = state.bags;
+    var d = compute();
+    $('detail').innerHTML = tableHtml(d);
+    $('grand').textContent = fmt(d.total);
+    renderTickets();
+  }
+
+  function resetAll() {
+    if (!confirm('Réinitialiser le calcul ?')) return;
+    state = { tickets: [], wait: 0, bags: 0 };
+    $('km').value = '';
+    $('c15').checked = false;
+    document.querySelector('input[name=zone][value=dep]').checked = true;
+    document.querySelector('input[name=period][value=normal]').checked = true;
+    ['sPort', 'sPrem', 'pVide', 'pTrans', 'pAssu'].forEach(function (id) { $(id).checked = false; });
+    $('detour').value = ''; $('renfort').value = ''; $('peageIn').value = '';
+    render();
+  }
+
+  function addTicket() {
+    var v = num($('peageIn').value);
+    if (v > 0) { state.tickets.push(r2(v)); $('peageIn').value = ''; render(); }
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    var act = b.getAttribute('data-act');
+    if (act === 'wait') state.wait = Math.max(0, state.wait + parseInt(b.getAttribute('data-d'), 10));
+    if (act === 'bags') state.bags = Math.max(0, state.bags + parseInt(b.getAttribute('data-d'), 10));
+    if (act === 'del') state.tickets.splice(parseInt(b.getAttribute('data-i'), 10), 1);
+    render();
+  });
+
+  document.addEventListener('input', render);
+  document.addEventListener('change', render);
+  $('addTicket').addEventListener('click', addTicket);
+  $('peageIn').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addTicket(); } });
+  $('resetBtn').addEventListener('click', resetAll);
+  $('resetBtn2').addEventListener('click', resetAll);
+
+  $('copyBtn').addEventListener('click', function () {
+    var text = textHtml(compute());
+    var done = function () { var t = $('toast'); t.style.display = 'block'; setTimeout(function () { t.style.display = 'none'; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (err) { alert(text); }
+      document.body.removeChild(ta);
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
