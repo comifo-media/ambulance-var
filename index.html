@@ -3,6 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1e293b">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ambulance Var">
+<link rel="apple-touch-icon" href="icons/icon.svg">
 <title>Facture ambulance Var (83) - Tarif SEFI 2025</title>
 <style>
 :root{--bg:#f5f6f8;--card:#ffffff;--txt:#1b2130;--muted:#6d7587;--acc:#1b6ca8;--red:#c8323f;--line:#e3e7ee;--ok:#2a9d5c}
@@ -362,6 +369,13 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
 
   render();
 })();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  });
+}
 </script>
 </body>
 </html>
