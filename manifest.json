@@ -1,0 +1,16 @@
+{
+  "name": "Ambulance Var - Tarifs 2025",
+  "short_name": "Ambulance Var",
+  "description": "Calculateur de facture ambulance, Var (83), grille 2025. Fonctionne hors ligne.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "lang": "fr",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
