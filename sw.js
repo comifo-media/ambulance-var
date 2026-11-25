@@ -1,5 +1,5 @@
 // Service Worker: cache de l'app pour un usage hors ligne (chemins relatifs au dossier du sw.js)
-const CACHE = 'ambulance-var-v2';
+const CACHE = 'ambulance-var-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icons/icon.svg'];
 
 self.addEventListener('install', (event) => {
