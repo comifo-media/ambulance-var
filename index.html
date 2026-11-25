@@ -20,6 +20,8 @@ header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
 .seg.three{grid-template-columns:1fr 1fr 1fr}
 @media(max-width:520px){.seg.three{grid-template-columns:1fr}}
 .seg label{border:1px solid var(--line);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;font-size:.92rem}
+.seg small{color:var(--muted);font-size:.75rem}
+.seg label:has(input:checked) small{color:#fff}
 .seg input{display:none}
 .seg label:has(input:checked){background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
 .seg label:has(input:disabled){opacity:.4;cursor:not-allowed}
@@ -95,8 +97,8 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
       </div>
       <div class="seg three" id="periodSeg">
         <label><input type="radio" name="period" value="normal" checked>Jour normal</label>
-        <label><input type="radio" name="period" value="nuit">Nuit 20h-08h (+75 %)</label>
-        <label><input type="radio" name="period" value="we">Sam. apm, dim., férié (+50 %)</label>
+        <label><input type="radio" name="period" value="nuit">Forfait Nuit<br><small>(20h - 8h)</small></label>
+        <label><input type="radio" name="period" value="we">Forfait WE<br><small>(Sam > 12h, Dim, Férié)</small></label>
       </div>
       <div class="note" id="periodNote"></div>
     </section>
@@ -104,10 +106,10 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     <section class="card" style="margin-top:14px">
       <h2>Péages autoroutiers</h2>
       <div class="field" style="margin-top:0">
-        <label for="peageIn">Montant d'un ticket (€, décimales possibles)</label>
+        <label for="peageIn">Montant d'un péage (€, décimales possibles)</label>
         <div class="row">
           <input type="number" id="peageIn" min="0" step="0.01" inputmode="decimal" placeholder="0,00">
-          <button class="btn" id="addTicket" type="button">Ajouter</button>
+          <button class="btn" id="addTicket" type="button">Ajouter un péage</button>
         </div>
       </div>
       <ul class="tickets" id="ticketList"></ul>
@@ -231,9 +233,8 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
       sections.push({ title: 'Calcul conventionnel', rows: conv });
     }
 
-    var peage = r2(state.tickets.reduce(function (a, b) { return a + b; }, 0));
     var peRows = [];
-    if (peage > 0) peRows.push(['Péages (' + state.tickets.length + ' ticket' + (state.tickets.length > 1 ? 's' : '') + ', prix coûtant)', peage]);
+    state.tickets.forEach(function (amt, i) { peRows.push(['Péage ' + (i + 1), amt]); });
     sections.push({ title: 'Péages', rows: peRows });
 
     var remb = [];
@@ -292,7 +293,7 @@ tr.sub td{font-weight:600;border-top:2px solid var(--line)}
     ul.innerHTML = '';
     state.tickets.forEach(function (amt, i) {
       var li = document.createElement('li');
-      li.innerHTML = '<span>Ticket ' + (i + 1) + '</span><span>' + fmt(amt) + ' <button class="btn ghost small" type="button" data-act="del" data-i="' + i + '">Supprimer</button></span>';
+      li.innerHTML = '<span>Péage ' + (i + 1) + '</span><span>' + fmt(amt) + ' <button class="btn ghost small" type="button" data-act="del" data-i="' + i + '">Supprimer</button></span>';
       ul.appendChild(li);
     });
     $('peageTotal').textContent = fmt(state.tickets.reduce(function (a, b) { return a + b; }, 0));
