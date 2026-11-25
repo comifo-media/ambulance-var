@@ -163,7 +163,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
           <span>Attente &gt; 15 min (tranches de 30 min)<br><span class="note" style="margin:0">45,00 € par tranche</span></span>
           <div class="counter"><button type="button" data-act="wait" data-d="-1">-</button><output id="waitN">0</output><button type="button" data-act="wait" data-d="1">+</button></div>
         </div>
-        <label class="check"><input type="checkbox" id="pVide"> Déplacement / portage à vide <span class="p">90,00 €</span></label>
+        <label class="check"><input type="checkbox" id="pVide"> Voyage à vide / Portage <span class="p">90,00 €</span></label>
         <div class="rowline">
           <span>Bagages supplémentaires (&gt; 2)<br><span class="note" style="margin:0">2,00 € par bagage</span></span>
           <div class="counter"><button type="button" data-act="bags" data-d="-1">-</button><output id="bagsN">0</output><button type="button" data-act="bags" data-d="1">+</button></div>
@@ -234,18 +234,20 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       <li>Non cumulables, non majorés.</li>
     </ul>
 
-    <h3>Tarifs non remboursables / Hors convention</h3>
+    <h3>Prestations non remboursables (applicables à compter du 07/11/2023)</h3>
     <table>
-      <tr><td>Attente (au-delà de 15 min)</td><td class="n">45,00 € / demi-heure</td></tr>
-      <tr><td>Voyage à vide / Portement</td><td class="n">90,00 €</td></tr>
-      <tr><td>Bagage supplémentaire (au-delà de 2 bagages)</td><td class="n">2,00 € par bagage</td></tr>
+      <tr><td>Attente au-delà de 15 minutes</td><td class="n">45,00 € / demi-heure</td></tr>
+      <tr><td>Voyage à vide / Portage</td><td class="n">90,00 €</td></tr>
+      <tr><td>Bagage supplémentaire (au-delà de 2 bagages)</td><td class="n">2,00 € / bagage</td></tr>
     </table>
+    <p class="small">Tarifs applicables à compter du 07/11/2023. Ces prestations sont hors convention : elles ne sont pas prises en charge par l'Assurance Maladie. D'autres suppléments particuliers peuvent figurer dans la grille officielle ; les vérifier sur la grille avant toute facturation exceptionnelle.</p>
 
     <h3>Sources officielles</h3>
     <ul>
       <li><a href="https://www.ameli.fr/transporteur-sanitaire/exercice-professionnel/facturation/tarifs/ambulances-tarifs-conventionnels" target="_blank" rel="noopener">Ameli Pro : tarifs conventionnels ambulances</a></li>
       <li><a href="https://www.ameli.fr/transporteur-sanitaire/exercice-professionnel/vie-entreprise/tuph-modalites-et-demarches" target="_blank" rel="noopener">Ameli Pro : TUPH, modalités et démarches</a></li>
       <li><a href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000047524277" target="_blank" rel="noopener">Légifrance : arrêté du 3 mai 2023 (avenant TUPH)</a></li>
+      <li><a href="https://www.federationnationaleambulanciersprives.fr/index.php/assurance-maladie/1078-les-revalorisations-tarifaires-applicables-depuis-le-7-novembre-2023" target="_blank" rel="noopener">FNAP : revalorisations applicables depuis le 7 novembre 2023</a></li>
     </ul>
     <p class="small">Valeurs indicatives. Vérifier sur les sources officielles avant facturation.</p>
     <p class="refFoot">Application créée par David et Alix (assistante IA Poke)</p>
@@ -332,7 +334,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 
     var non = [];
     if (state.wait > 0) non.push(['Attente > 15 min (' + state.wait + ' x 30 min)', r2(state.wait * WAIT)]);
-    if ($('pVide').checked) non.push(['Déplacement / portage à vide', 90]);
+    if ($('pVide').checked) non.push(['Voyage à vide / Portage', 90]);
     if (state.bags > 0) non.push(['Bagages supplémentaires (' + state.bags + ' x 2,00 €)', r2(state.bags * BAG)]);
     var renfort = num($('renfort').value);
     if (renfort > 0) non.push(['Ambulancier en renfort', r2(renfort)]);
