@@ -124,12 +124,12 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       </div>
       <datalist id="placesDl"></datalist>
       <div class="field">
-        <label for="km">Kilomètres totaux parcourus</label>
-        <input type="number" id="km" min="0" step="0.1" value="" inputmode="decimal" placeholder="0">
+        <label for="km">Kilomètres totaux parcourus (entier, km entamé = km dû)</label>
+        <input type="number" id="km" min="0" step="1" value="" inputmode="numeric" placeholder="0">
       </div>
       <div class="locked" id="kmHint"></div>
       <a class="btn ghost small refLinkBtn" href="referentiel.html">Consulter le référentiel kilométrique</a>
-      <div class="note">Le forfait et les km se remplissent automatiquement à partir du départ et de l'arrivée. Vous pouvez toujours les modifier à la main.</div>
+      <div class="note">Le forfait et les km se remplissent automatiquement à partir du départ et de l'arrivée. Vous pouvez toujours les modifier à la main. Tout km entamé est arrondi au km supérieur.</div>
     </section>
 
     <section class="card" style="margin-top:14px">
@@ -313,7 +313,8 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
     var c15 = $('c15').checked;
     var zone = document.querySelector('input[name=zone]:checked').value;
     var period = document.querySelector('input[name=period]:checked').value;
-    var km = num($('km').value);
+    // Règle métier : tout km entamé est un km dû, le kilométrage est toujours un entier arrondi au supérieur
+    var km = Math.ceil(num($('km').value));
     var sections = [];
     var conv = [];
     var convTotal = 0;
@@ -390,7 +391,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
     t += 'Tarif : Majoré SEFI 2025\n';
     t += 'Zone : ' + (d.zone === 'dep' ? 'Départemental' : 'Agglo Grand Toulon') + '\n';
     t += 'Mode : ' + (d.c15 ? 'Mission SAMU (T.UPH)' : 'Conventionnel') + '\n';
-    t += 'Kilométrage total : ' + fkm(d.km) + ' km\n';
+    t += 'Kilométrage total : ' + d.km + ' km\n';
     d.sections.forEach(function (s) {
       if (!s.rows.length) return;
       t += '\n' + s.title.toUpperCase() + '\n';
@@ -497,6 +498,21 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 
   // Saisie utilisateur dans km : on reprend la main, la valeur devient manuelle
   km.addEventListener('input', function (e) { if (e.isTrusted) setAuto(false); });
+
+  // Règle métier : kilomètre entamé = kilomètre dû. Le champ ne garde qu'un entier arrondi au supérieur.
+  function normalizeKm() {
+    var raw = String(km.value).trim().replace(',', '.');
+    if (raw === '') return;
+    var v = parseFloat(raw);
+    if (!isFinite(v) || v < 0) { km.value = ''; return; }
+    var up = String(Math.ceil(v));
+    if (km.value !== up) {
+      km.value = up;
+      km.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
+  km.addEventListener('change', normalizeKm);
+  km.addEventListener('blur', normalizeKm);
 
   function setZone(v) {
     var r = document.querySelector('input[name=zone][value="' + v + '"]');
