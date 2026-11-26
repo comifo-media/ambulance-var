@@ -45,7 +45,7 @@ header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
 .note{font-size:.8rem;color:var(--muted);margin-top:6px}
 .field{margin-top:10px}
 .field label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
-input[type=number]{width:100%;padding:12px;font-size:1.05rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--txt)}
+input[type=number],input[type=text]{width:100%;padding:12px;font-size:1.05rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--txt)}
 .row{display:flex;gap:8px;align-items:center}
 .row input{flex:1}
 .btn{padding:12px 14px;border:0;border-radius:10px;background:var(--acc);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer}
@@ -89,6 +89,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 .refBody .small{font-size:.78rem;color:var(--muted)}
 .refBody .kmRule{color:var(--red);font-weight:600;margin:10px 0 0}
 .refFoot{margin:14px 0 0;text-align:center;color:var(--muted);font-size:.72rem;line-height:1.35}
+.refLinkBtn{display:inline-block;margin-top:12px;text-decoration:none}
 </style>
 </head>
 <body>
@@ -112,9 +113,21 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
     <section class="card" style="margin-top:14px">
       <h2>Kilométrage</h2>
       <div class="field" style="margin-top:0">
+        <label for="dep">Commune / Lieu de départ</label>
+        <input type="text" id="dep" list="placesDl" autocomplete="off" placeholder="ex : Toulon">
+      </div>
+      <div class="field">
+        <label for="arr">Commune / Lieu d'arrivée</label>
+        <input type="text" id="arr" list="placesDl" autocomplete="off" placeholder="ex : Hyères">
+      </div>
+      <datalist id="placesDl"></datalist>
+      <div class="field">
         <label for="km">Kilomètres totaux parcourus</label>
         <input type="number" id="km" min="0" step="0.1" value="" inputmode="decimal" placeholder="0">
       </div>
+      <div class="locked" id="kmHint"></div>
+      <a class="btn ghost small refLinkBtn" href="referentiel.html">Consulter le référentiel kilométrique</a>
+      <div class="note">Le forfait et les km se remplissent automatiquement à partir du départ et de l'arrivée. Vous pouvez toujours les modifier à la main.</div>
     </section>
 
     <section class="card" style="margin-top:14px">
@@ -458,6 +471,66 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
   });
 
   render();
+})();
+</script>
+<script src="referentiel-data.js"></script>
+<script>
+/* Départ / arrivée : forfait et km automatiques, toujours modifiables à la main */
+(function () {
+  var R = window.REF;
+  if (!R) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var dep = $('dep'), arr = $('arr'), km = $('km'), hint = $('kmHint');
+  var kmAuto = false;
+
+  $('placesDl').innerHTML = R.suggestions().map(function (p) {
+    return '<option value="' + p.replace(/"/g, '&quot;') + '"></option>';
+  }).join('');
+
+  // L'utilisateur qui tape dans km reprend la main : on ne réécrit plus sa valeur
+  km.addEventListener('input', function (e) { if (e.isTrusted) kmAuto = false; });
+
+  function setZone(v) {
+    var r = document.querySelector('input[name=zone][value="' + v + '"]');
+    if (r && !r.checked) { r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); }
+  }
+
+  function update() {
+    var a = dep.value.trim(), b = arr.value.trim();
+    if (!a || !b) { hint.textContent = ''; return; }
+    var f = R.forfaitFor(a, b);
+    var label = f === 'toulon' ? 'Agglo Grand Toulon' : 'Départemental';
+    if (f) setZone(f);
+    var d = R.distance(a, b);
+    if (d !== null) {
+      if (km.value === '' || kmAuto) {
+        km.value = String(d);
+        kmAuto = true;
+        km.dispatchEvent(new Event('input', { bubbles: true }));
+        hint.textContent = 'Distance conventionnelle ' + d + ' km (' + a + ' → ' + b + ') : renseignée automatiquement. Forfait ' + label + ' suggéré.';
+      } else {
+        hint.textContent = 'Distance conventionnelle ' + d + ' km (' + a + ' → ' + b + ') : kilométrage déjà saisi, non modifié. Forfait ' + label + ' suggéré.';
+      }
+    } else {
+      hint.textContent = 'Aucune distance répertoriée pour ce trajet : saisissez les km. Forfait ' + label + ' suggéré (modifiable).';
+    }
+    // Notifie le calcul (le forfait a pu changer)
+    document.getElementById('km').dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  dep.addEventListener('input', update);
+  dep.addEventListener('change', update);
+  arr.addEventListener('input', update);
+  arr.addEventListener('change', update);
+
+  // Réinitialisation : on vide départ/arrivée si le calcul a bien été remis à zéro
+  function afterReset() {
+    setTimeout(function () {
+      if (km.value === '') { dep.value = ''; arr.value = ''; hint.textContent = ''; kmAuto = false; }
+    }, 0);
+  }
+  $('resetBtn').addEventListener('click', afterReset);
+  $('resetBtn2').addEventListener('click', afterReset);
 })();
 </script>
 <script>
