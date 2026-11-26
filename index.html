@@ -92,6 +92,8 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
 .refLinkBtn{display:inline-block;margin-top:12px;text-decoration:none}
 .autoKm{background:#ffe680 !important;color:#1b2130 !important;border-color:#e0b400 !important}
 .kmAutoNote{display:inline-block;margin-top:6px;padding:4px 8px;border-radius:8px;background:#ffe680;color:#1b2130;font-size:.8rem}
+.kmHelp{margin-top:8px;font-size:.85rem;color:var(--txt);line-height:1.45}
+.kmYellow{background:#ffd166;color:#1b2130;font-weight:700;padding:2px 6px;border-radius:6px}
 </style>
 </head>
 <body>
@@ -129,7 +131,7 @@ dialog.ref::backdrop{background:rgba(10,14,22,.55)}
       </div>
       <div class="locked" id="kmHint"></div>
       <a class="btn ghost small refLinkBtn" href="referentiel.html">Consulter le référentiel kilométrique</a>
-      <div class="note">Le forfait et les km se remplissent automatiquement à partir du départ et de l'arrivée. Vous pouvez toujours les modifier à la main. Tout km entamé est arrondi au km supérieur.</div>
+      <div class="kmHelp"><span class="kmYellow">Le kilométrage se remplit automatiquement - si le trajet est inscrit dans le référentiel -</span> Sinon, saisissez les km à la main. Le forfait se suggère aussi automatiquement, modifiable à tout moment. Tout km entamé est arrondi au km supérieur.</div>
     </section>
 
     <section class="card" style="margin-top:14px">
