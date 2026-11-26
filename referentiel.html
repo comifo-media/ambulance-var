@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1e293b">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<title>Référentiel kilométrique Var - ASSU</title>
+<style>
+:root{--bg:#f5f6f8;--card:#ffffff;--txt:#1b2130;--muted:#6d7587;--acc:#1b6ca8;--red:#c8323f;--line:#e3e7ee;--ok:#2a9d5c}
+@media (prefers-color-scheme:dark){:root{--bg:#0e131d;--card:#171f2e;--txt:#e9edf5;--muted:#9aa4b8;--acc:#4ea8e8;--red:#ff5b6b;--line:#2a3447;--ok:#44c17d}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);font-size:16px;line-height:1.4}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header h1{font-size:1rem;margin:0}
+header small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
+.back{display:inline-block;text-decoration:none;color:var(--acc);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:.88rem;font-weight:600;white-space:nowrap}
+.back:hover{border-color:var(--acc)}
+main{max-width:1000px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.card h2{font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:var(--acc);margin:0 0 10px}
+.card h3{font-size:.95rem;margin:14px 0 6px}
+.note{font-size:.82rem;color:var(--muted);line-height:1.4}
+.red{color:var(--red);font-weight:600}
+.search{width:100%;padding:12px;font-size:1rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--txt)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.tabs button{border:1px solid var(--line);background:var(--bg);color:var(--txt);border-radius:999px;padding:7px 12px;font-size:.85rem;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.grid2{grid-template-columns:1fr}}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+td.n,th.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.hl td{background:rgba(27,108,168,.12)}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--acc);color:#fff;margin-left:6px;vertical-align:middle}
+.badge.dep{background:var(--muted)}
+.zones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:720px){.zones{grid-template-columns:1fr}}
+.zone{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}
+.zone h3{margin:0 0 6px;color:var(--acc);font-size:.95rem}
+.zone ul{margin:0;padding-left:18px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:720px){.rules{grid-template-columns:1fr}}
+.rule{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg);font-size:.9rem}
+.rule strong{display:block;margin-bottom:4px}
+.empty{padding:14px;text-align:center;color:var(--muted);font-size:.9rem}
+.count{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+.sig{text-align:center;color:var(--muted);font-size:.72rem;margin:18px 0 24px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Référentiel kilométrique Var<small>Distances conventionnelles et péages (grilles 2025)</small></h1>
+  <a class="back" href="index.html">&larr; Retour à l'application</a>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Recherche</h2>
+    <input class="search" id="q" type="search" placeholder="Rechercher une commune, un hôpital ou un lieu (ex : Hyères, Fréjus, La Timone)" autocomplete="off" aria-label="Rechercher">
+    <div class="tabs" id="tabs" role="group" aria-label="Filtrer par section">
+      <button type="button" data-f="all" aria-pressed="true">Tout</button>
+      <button type="button" data-f="zones" aria-pressed="false">Zones</button>
+      <button type="button" data-f="regles" aria-pressed="false">Forfaits</button>
+      <button type="button" data-f="hopitaux" aria-pressed="false">Hôpitaux</button>
+      <button type="button" data-f="distances" aria-pressed="false">Distances</button>
+      <button type="button" data-f="peages" aria-pressed="false">Péages</button>
+    </div>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section class="card" data-sec="regles">
+    <h2>Forfait Agglo ou Départemental</h2>
+    <div class="rules">
+      <div class="rule"><strong>Forfait Agglomération Grand Toulon</strong>Trajets Z1 &harr; Z1, Z1 &harr; Z2, Z1 &harr; Z3, Z2 &harr; Z2, Z3 &harr; Z3.<br>Forfait : 64,08 € (3 km inclus).</div>
+      <div class="rule"><strong>Forfait Départemental</strong>Trajet Z2 &harr; Z3, ou tout trajet hors Grand Toulon.<br>Forfait : 57,39 € (3 km inclus).</div>
+    </div>
+    <p class="note" style="margin-top:10px">Au-delà de 3 km : 2,44 € par km (non majoré). Le forfait peut toujours être modifié manuellement dans l'application.</p>
+  </section>
+
+  <section class="card" data-sec="zones">
+    <h2>Découpage Grand Toulon</h2>
+    <div class="zones" id="zones"></div>
+    <p class="note" style="margin-top:10px">Hyères Plage et Hyères Giens sont rattachées à Hyères (Zone 2).</p>
+  </section>
+
+  <section class="card" data-sec="hopitaux">
+    <h2>Situation géographique des hôpitaux</h2>
+    <div class="tablewrap"><table><thead><tr><th>Secteur</th><th>Établissements</th></tr></thead><tbody id="hop"></tbody></table></div>
+  </section>
+
+  <section class="card" data-sec="distances">
+    <h2>Distances conventionnelles</h2>
+    <p class="note">Choisissez un départ, puis une destination pour afficher la distance. La recherche filtre aussi les lignes ci-dessous.</p>
+    <div class="grid2" style="margin-top:10px">
+      <div>
+        <label class="note" for="dA">Départ</label>
+        <select class="search" id="dA"></select>
+      </div>
+      <div>
+        <label class="note" for="dB">Destination</label>
+        <input class="search" id="dB" list="placesList" placeholder="Commune ou lieu" autocomplete="off">
+        <datalist id="placesList"></datalist>
+      </div>
+    </div>
+    <div class="empty" id="pairRes" style="margin-top:8px"></div>
+    <h3 id="tabTitle">Distances depuis Toulon</h3>
+    <div class="tablewrap"><table><thead><tr><th>Départ</th><th>Arrivée</th><th class="n">Km</th></tr></thead><tbody id="dist"></tbody></table></div>
+  </section>
+
+  <section class="card" data-sec="peages">
+    <h2>Péages et tunnel</h2>
+    <h3>Escota depuis La Seyne (VSL / TPMR gros volume)</h3>
+    <div class="tablewrap"><table><thead><tr><th>Destination</th><th class="n">Tarif</th></tr></thead><tbody id="pVsl"></tbody></table></div>
+    <h3>Escota depuis La Seyne (TPMR / Ambulance CAT A)</h3>
+    <div class="tablewrap"><table><thead><tr><th>Destination</th><th class="n">Tarif</th></tr></thead><tbody id="pCata"></tbody></table></div>
+    <h3>Tunnel Prado (2025)</h3>
+    <div class="tablewrap"><table><thead><tr><th>Tunnel</th><th class="n">Tarif</th></tr></thead><tbody id="pPrado"></tbody></table></div>
+  </section>
+
+  <p class="sig">Référentiel indicatif extrait des grilles 2025. Vérifier avant facturation.<br>Application créée par David et Alix (assistante IA Poke)</p>
+</main>
+
+<script src="referentiel-data.js"></script>
+<script>
+(function () {
+  'use strict';
+  var R = window.REF;
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var fmtEur = function (x) { return x.toFixed(2).replace('.', ',') + ' €'; };
+  var filter = 'all';
+
+  // Zones
+  $('zones').innerHTML = ['Z1', 'Z2', 'Z3'].map(function (z) {
+    return '<div class="zone"><h3>' + R.ZONES[z].label + '</h3><ul>' +
+      R.ZONES[z].communes.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ul></div>';
+  }).join('');
+
+  // Hôpitaux
+  $('hop').innerHTML = R.HOPITAUX.map(function (h) {
+    return '<tr data-s="' + esc(R.norm(h.ville + ' ' + h.items.join(' '))) + '"><td><strong>' + esc(h.ville) + '</strong></td><td>' + h.items.map(esc).join(', ') + '</td></tr>';
+  }).join('');
+
+  // Péages
+  var rowsP = function (arr) { return arr.map(function (p) { return '<tr data-s="' + esc(R.norm(p[0])) + '"><td>' + esc(p[0]) + '</td><td class="n">' + fmtEur(p[1]) + '</td></tr>'; }).join(''); };
+  $('pVsl').innerHTML = rowsP(R.PEAGES_ESCOTA_VSL);
+  $('pCata').innerHTML = rowsP(R.PEAGES_ESCOTA_CATA);
+  $('pPrado').innerHTML = rowsP(R.PEAGES_PRADO);
+
+  // Liste de destinations (datalist + select)
+  var places = R.suggestions();
+  $('placesList').innerHTML = places.map(function (p) { return '<option value="' + esc(p) + '"></option>'; }).join('');
+  var origins = [];
+  R.PAIRS.forEach(function (p) { if (origins.indexOf(p[0]) < 0) origins.push(p[0]); });
+  $('dA').innerHTML = origins.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('');
+  $('dA').value = 'Toulon';
+
+  // Distances : tableau filtré par départ sélectionné, et tableau complet pour la recherche
+  function renderDist() {
+    var q = R.norm($('q').value);
+    var dep = $('dA').value;
+    var rows = R.PAIRS.filter(function (p) {
+      if (q) return R.norm(p[0] + ' ' + p[1]).indexOf(q) >= 0;
+      return p[0] === dep;
+    });
+    $('tabTitle').textContent = q ? 'Résultats de recherche (' + rows.length + ')' : 'Distances depuis ' + dep;
+    $('dist').innerHTML = rows.map(function (p) {
+      var hl = q && (R.norm(p[0]).indexOf(q) >= 0 || R.norm(p[1]).indexOf(q) >= 0) ? ' class="hl"' : '';
+      return '<tr' + hl + ' data-s="' + esc(R.norm(p[0] + ' ' + p[1])) + '"><td>' + esc(p[0]) + '</td><td>' + esc(p[1]) + '</td><td class="n">' + p[2] + ' km</td></tr>';
+    }).join('') || '<tr><td colspan="3" class="empty">Aucun résultat</td></tr>';
+  }
+
+  // Résultat pour une paire départ/destination
+  function renderPair() {
+    var a = $('dA').value, b = $('dB').value.trim();
+    var out = $('pairRes');
+    if (!b) { out.textContent = 'Saisissez une destination pour voir la distance.'; return; }
+    var km = R.distance(a, b);
+    var zd = R.zoneOf(a), za = R.zoneOf(b);
+    var f = R.forfaitFor(a, b);
+    var fLabel = f === 'toulon' ? 'Forfait Agglo Grand Toulon' : 'Forfait Départemental';
+    var zTxt = (zd || 'hors GT') + ' / ' + (za || 'hors GT');
+    if (km === null) {
+      out.innerHTML = 'Pas de distance conventionnelle répertoriée pour <strong>' + esc(a) + ' &rarr; ' + esc(b) + '</strong>. ' +
+        '<span class="note">Forfait indicatif : ' + fLabel + ' (zones ' + esc(zTxt) + ').</span>';
+    } else {
+      out.innerHTML = '<strong>' + esc(a) + ' &rarr; ' + esc(b) + ' : ' + km + ' km</strong><br><span class="note">' + fLabel + ' (zones ' + esc(zTxt) + ').</span>';
+    }
+  }
+
+  // Filtre de section + recherche : affiche/masque les sections et lignes
+  function applyFilter() {
+    var q = R.norm($('q').value);
+    document.querySelectorAll('[data-sec]').forEach(function (s) {
+      var okSec = filter === 'all' || filter === s.getAttribute('data-sec');
+      s.style.display = okSec ? '' : 'none';
+    });
+    var visible = 0;
+    document.querySelectorAll('#hop tr, #pVsl tr, #pCata tr, #pPrado tr').forEach(function (tr) {
+      var ok = !q || (tr.getAttribute('data-s') || '').indexOf(q) >= 0;
+      tr.style.display = ok ? '' : 'none';
+      if (ok) visible++;
+    });
+    renderDist();
+    $('count').textContent = q ? (visible + ' ligne(s) trouvée(s) dans les hôpitaux et péages, plus les distances ci-dessous.') : '';
+    renderPair();
+  }
+
+  document.querySelectorAll('#tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      filter = b.getAttribute('data-f');
+      document.querySelectorAll('#tabs button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      applyFilter();
+    });
+  });
+  $('q').addEventListener('input', applyFilter);
+  $('dA').addEventListener('change', applyFilter);
+  $('dB').addEventListener('input', renderPair);
+
+  applyFilter();
+})();
+</script>
+</body>
+</html>
